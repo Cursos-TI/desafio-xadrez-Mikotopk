@@ -1,76 +1,124 @@
 #include <stdio.h>
 
+// --- Protótipos das Funções Recursivas ---
+// Declaramos as funções aqui para que a função 'main' possa encontrá-las,
+// mesmo que suas definições estejam no final do arquivo.
+void moverTorreRecursivo(int passos_restantes);
+void moverBispoRecursivo(int passos_restantes);
+void moverRainhaRecursivo(int passos_restantes);
+
+
 /**
- * Desafio de Xadrez - Nível Aventureiro
+ * Desafio de Xadrez - Nível Mestre
  *
- * Este programa simula o movimento de quatro peças de xadrez.
- * Torre (for), Bispo (while), Rainha (do-while) e o Cavalo,
- * cujo movimento em "L" é simulado com laços aninhados (for e while).
+ * Este programa utiliza técnicas avançadas para simular movimentos no xadrez:
+ * - Funções recursivas para os movimentos lineares e diagonais (Torre, Bispo, Rainha).
+ * - Laços aninhados para uma segunda implementação do Bispo.
+ * - Laços aninhados complexos para o movimento em "L" do Cavalo.
  */
 int main() {
-    // --- Definição de Variáveis ---
+    // --- Definição de Constantes para os Movimentos ---
     const int MOVIMENTOS_TORRE = 5;
     const int MOVIMENTOS_BISPO = 5;
     const int MOVIMENTOS_RAINHA = 8;
-    // Novas constantes para o movimento do Cavalo
-    const int MOVIMENTOS_CAVALO_BAIXO = 2;
-    const int MOVIMENTOS_CAVALO_ESQUERDA = 1;
+    const int MOVIMENTOS_CAVALO_CIMA = 2;
+    const int MOVIMENTOS_CAVALO_DIREITA = 1;
 
 
-    // --- 1. Movimento da Torre (usando o laço FOR) ---
-    printf("--- Movimento da Torre (5 casas para a direita) ---\n");
-    for (int i = 0; i < MOVIMENTOS_TORRE; i++) {
-        printf("Direita\n");
-    }
+    // --- 1. Movimento da Torre (com Recursividade) ---
+    printf("--- Movimento da Torre (Recursivo) ---\n");
+    moverTorreRecursivo(MOVIMENTOS_TORRE);
 
 
-    // --- 2. Movimento do Bispo (usando o laço WHILE) ---
-    printf("\n--- Movimento do Bispo (5 casas na diagonal superior direita) ---\n");
-    int contador_bispo = 0;
-    while (contador_bispo < MOVIMENTOS_BISPO) {
-        printf("Cima, Direita\n");
-        contador_bispo++;
-    }
+    // --- 2. Movimento do Bispo (com Recursividade) ---
+    printf("\n--- Movimento do Bispo (Recursivo) ---\n");
+    moverBispoRecursivo(MOVIMENTOS_BISPO);
 
 
-    // --- 3. Movimento da Rainha (usando o laço DO-WHILE) ---
-    printf("\n--- Movimento da Rainha (8 casas para a esquerda) ---\n");
-    int contador_rainha = 0;
-    do {
-        printf("Esquerda\n");
-        contador_rainha++;
-    } while (contador_rainha < MOVIMENTOS_RAINHA);
-
-
-    // --- 4. Movimento do Cavalo (usando laços aninhados FOR e WHILE) ---
-    // O movimento em "L" do cavalo é composto por duas fases:
-    // Fase 1: Mover-se duas casas para baixo.
-    // Fase 2: Mover-se uma casa para a esquerda.
-    // Usaremos um laço 'for' externo para controlar essas duas fases.
-    // Dentro de cada fase, um laço 'while' executará os passos correspondentes.
-
-    printf("\n--- Movimento do Cavalo (2 casas para baixo, 1 para a esquerda) ---\n");
-    // O laço 'for' externo controla as fases do movimento (fase 0 = vertical, fase 1 = horizontal)
-    for (int fase = 0; fase < 2; fase++) {
-        if (fase == 0) {
-            // Se estamos na primeira fase (fase 0), movemos para baixo.
-            int passos_verticais = 0;
-            // O laço 'while' interno executa os 2 passos para baixo.
-            while (passos_verticais < MOVIMENTOS_CAVALO_BAIXO) {
-                printf("Baixo\n");
-                passos_verticais++;
-            }
-        } else {
-            // Se estamos na segunda fase (fase 1), movemos para a esquerda.
-            int passos_horizontais = 0;
-            // O laço 'while' interno executa o 1 passo para a esquerda.
-            while (passos_horizontais < MOVIMENTOS_CAVALO_ESQUERDA) {
-                printf("Esquerda\n");
-                passos_horizontais++;
+    // --- 3. Movimento do Bispo (com Loops Aninhados) ---
+    // Implementação alternativa do Bispo para cumprir o requisito de laços aninhados.
+    // O laço externo controla o eixo vertical e o interno, o horizontal.
+    // A impressão só ocorre quando os contadores são iguais, criando uma diagonal.
+    printf("\n--- Movimento do Bispo (Loops Aninhados) ---\n");
+    for (int y = 0; y < MOVIMENTOS_BISPO; y++) { // Loop externo: movimento vertical
+        for (int x = 0; x < MOVIMENTOS_BISPO; x++) { // Loop interno: movimento horizontal
+            // A condição (x == y) garante que o movimento seja na diagonal
+            if (x == y) {
+                printf("Cima, Direita\n");
             }
         }
     }
 
 
+    // --- 4. Movimento da Rainha (com Recursividade) ---
+    printf("\n--- Movimento da Rainha (Recursivo) ---\n");
+    moverRainhaRecursivo(MOVIMENTOS_RAINHA);
+
+
+    // --- 5. Movimento do Cavalo (com Loops Complexos) ---
+    // Movimento: 2 casas para cima, 1 para a direita.
+    // Usamos um laço 'for' externo para os 3 passos totais do movimento.
+    // A variável 'passo' controla qual etapa do "L" estamos executando.
+    printf("\n--- Movimento do Cavalo (Loops Complexos) ---\n");
+    for (int passo = 1; passo <= (MOVIMENTOS_CAVALO_CIMA + MOVIMENTOS_CAVALO_DIREITA); passo++) {
+        // Se o passo atual ainda faz parte do movimento vertical
+        if (passo <= MOVIMENTOS_CAVALO_CIMA) {
+            printf("Cima\n");
+            continue; // Pula para a próxima iteração do loop 'for'
+        }
+        
+        // Se o passo atual é o movimento horizontal
+        if (passo > MOVIMENTOS_CAVALO_CIMA) {
+             printf("Direita\n");
+             break; // Encerra o loop, pois o movimento em "L" terminou
+        }
+    }
+
+
     return 0; // Indica que o programa terminou com sucesso
+}
+
+
+// --- Definições das Funções Recursivas ---
+
+/**
+ * move a Torre recursivamente 'passos_restantes' vezes.
+ */
+void moverTorreRecursivo(int passos_restantes) {
+    // Caso Base: a condição de parada. Se não há mais passos, a função retorna.
+    if (passos_restantes <= 0) {
+        return;
+    }
+    // Ação: imprime o movimento atual.
+    printf("Direita\n");
+    // Passo Recursivo: a função chama a si mesma, com um passo a menos.
+    moverTorreRecursivo(passos_restantes - 1);
+}
+
+/**
+ * move o Bispo recursivamente 'passos_restantes' vezes.
+ */
+void moverBispoRecursivo(int passos_restantes) {
+    // Caso Base: condição de parada da recursão.
+    if (passos_restantes <= 0) {
+        return;
+    }
+    // Ação
+    printf("Cima, Direita\n");
+    // Passo Recursivo
+    moverBispoRecursivo(passos_restantes - 1);
+}
+
+/**
+ * move a Rainha recursivamente 'passos_restantes' vezes.
+ */
+void moverRainhaRecursivo(int passos_restantes) {
+    // Caso Base: condição de parada da recursão.
+    if (passos_restantes <= 0) {
+        return;
+    }
+    // Ação
+    printf("Esquerda\n");
+    // Passo Recursivo
+    moverRainhaRecursivo(passos_restantes - 1);
 }
